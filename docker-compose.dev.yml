@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  client:
+    networks:
+      - mynetwork
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    networks:
+      - mynetwork
+    volumes:
+      - ./admin:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/conf/conf.d/default.conf
+    depends_on:
+      - client
+
+networks:
+  mynetwork:
+    driver: bridge
